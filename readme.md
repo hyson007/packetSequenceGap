@@ -141,3 +141,16 @@ HTTP Response:
     "OutOfOrderSeq": null
 }
 ```
+The allocated memory looks quite normal even when checking a 400 MB size file.
+
+[GIN] 2022/07/16 - 03:36:08 | 200 |  516.096834ms |       127.0.0.1 | POST     "/config" <br />
+Alloc = 8 MiB   TotalAlloc = 999 MiB    Sys = 30 MiB    NumGC = 127 <br />
+Alloc = 8 MiB   TotalAlloc = 999 MiB    Sys = 30 MiB    NumGC = 127 <br />
+Alloc = 8 MiB   TotalAlloc = 999 MiB    Sys = 30 MiB    NumGC = 127 <br />
+Alloc = 8 MiB   TotalAlloc = 999 MiB    Sys = 30 MiB    NumGC = 127 <br />
+Alloc = 8 MiB   TotalAlloc = 999 MiB    Sys = 30 MiB    NumGC = 127 <br />
+Alloc = 8 MiB   TotalAlloc = 999 MiB    Sys = 30 MiB    NumGC = 127 <br />
+Alloc = 8 MiB   TotalAlloc = 999 MiB    Sys = 30 MiB    NumGC = 127 <br />
+Alloc = 8 MiB   TotalAlloc = 999 MiB    Sys = 30 MiB    NumGC = 127 <br />
+Alloc = 8 MiB   TotalAlloc = 999 MiB    Sys = 30 MiB    NumGC = 127 <br />
+Alloc = 8 MiB   TotalAlloc = 999 MiB    Sys = 30 MiB    NumGC = 127 <br />
