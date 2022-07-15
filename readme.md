@@ -1,13 +1,14 @@
-this app will provide api to decode a range of offset within a packet, using either big endian or little endian to sequence number, then check are those sequence in order or not.
+**this app will provide api to decode a range of offset within a packet, using either big endian or little endian to sequence number, then check are those sequence in order or not.**
 
 Example:
 ICMP
 https://osqa-ask.wireshark.org/questions/3172/icmp-sequence-number-be-vs-le/
-Wireshark ICMP has both big endian and little endian format
-actual ICMP seq in packet are BE at 41-42 byte
+
+Wireshark ICMP has both big endian and little endian format, but the actual ICMP seq in packet are BE at 41-42 byte
 (14 Eth + 20 IP + Type (1B) + Code (1B) + CheckSum (2B) + ID (2B))
 
-Test1: 10K sequential ICMP eoch request
+Test1: 10K sequential ICMP echo request
+```
 HTTP POST Request:
 {
     "Encoding": "BigEndian",
@@ -27,12 +28,14 @@ HTTP Response:
     "GapMap": {},
     "OutOfOrderSeq": null
 }
-
+```
 
 =======================================================================================================
 Test2: Intentionally skip certain sequence to simulate the packet lost scenario.
-tshark -r 10K_Normal_icmp_request.pcapng -Y "!(icmp.seq == 937) && !(icmp.seq == 1115) && !(icmp.seq == 2000) && !(icmp.seq == 6654) && !(icmp.seq == 2245) && !(icmp.seq == 5000)"  -w  random_missing_packet.pcap
 
+`tshark -r 10K_Normal_icmp_request.pcapng -Y "!(icmp.seq == 937) && !(icmp.seq == 1115) && !(icmp.seq == 2000) && !(icmp.seq == 6654) && !(icmp.seq == 2245) && !(icmp.seq == 5000)"  -w  random_missing_packet.pcap`
+
+```
 HTTP POST Request:
 {
     "Encoding": "BigEndian",
@@ -66,16 +69,19 @@ HTTP Response:
     },
     "OutOfOrderSeq": null
 }
+```
 
 =======================================================================================================
 Test3: Out of order test, to simulate a bunch of packets arrives late due to possible network congestion.
 First to simulate the out of order packets
-1612  editcap -r 10K_Normal_icmp_request.pcapng tmp1-1000.pcap 1-1000
-1613  editcap -r 10K_Normal_icmp_request.pcapng tmp1001-1100.pcap 1001-1100
-1614  editcap -r 10K_Normal_icmp_request.pcapng tmp1101-1200.pcap 1101-1200
-1615  editcap -r 10K_Normal_icmp_request.pcapng tmp1201-10000.pcap 1201-10000
-1616  mergecap -w outOfOrder.pcap -a tmp1-1000.pcap tmp1101-1200.pcap tmp1001-1100.pcap tmp1201-10000.pcap
 
+editcap -r 10K_Normal_icmp_request.pcapng tmp1-1000.pcap 1-1000<br />
+editcap -r 10K_Normal_icmp_request.pcapng tmp1001-1100.pcap 1001-1100<br />
+editcap -r 10K_Normal_icmp_request.pcapng tmp1101-1200.pcap 1101-1200<br />
+editcap -r 10K_Normal_icmp_request.pcapng tmp1201-10000.pcap 1201-10000<br />
+mergecap -w outOfOrder.pcap -a tmp1-1000.pcap tmp1101-1200.pcap tmp1001-1100.pcap tmp1201-10000.pcap<br />
+
+```
 HTTP POST Request:
 {
     "Encoding": "BigEndian",
@@ -107,12 +113,14 @@ HTTP Response:
         1100
     ]
 }
+```
 
 =======================================================================================================
 Test4: iperf3 udp test
 Based on eyeball checking, the sequence number of iperf3 udp packet should be a 4 bytes
 from 41-44 bytes (inclusive)
 
+```
 HTTP POST Request:
 {
     "Encoding": "BigEndian",
@@ -132,3 +140,4 @@ HTTP Response:
     "GapMap": {},
     "OutOfOrderSeq": null
 }
+```
